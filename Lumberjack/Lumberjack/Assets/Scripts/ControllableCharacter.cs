@@ -15,6 +15,12 @@ public enum ECharacterState
 	Attacking
 }
 
+public enum ECharacterDirection
+{
+	Left,
+	Right
+}
+
 public class ControllableCharacter : MonoBehaviour 
 {
 	public string Name = "Name";
@@ -23,13 +29,16 @@ public class ControllableCharacter : MonoBehaviour
 
 	public ECharacterCondition CurrentCondition = ECharacterCondition.Alive;
 	public ECharacterState CurrentState = ECharacterState.Idle;
+	public ECharacterDirection CurrentDirection = ECharacterDirection.Left;
+
+	private Animator myAnimation;
 
 	public Vector3 Destination;
 
 	// Use this for initialization
 	void Start () 
 	{
-	
+		myAnimation = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -42,6 +51,7 @@ public class ControllableCharacter : MonoBehaviour
 			   Mathf.Abs(Destination.y - pos.y) < 0.1f)
 			{
 				//GameController.Instance.CharacterActionEnd(this);
+				CurrentState = ECharacterState.Idle;
 			}
 			else
 			{
@@ -49,13 +59,51 @@ public class ControllableCharacter : MonoBehaviour
 				moveDirection.Scale(new Vector3(10f, 10f, 1f));
 				moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
-				float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg + 90f;
-				this.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+				//float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg + 90f;
+				//this.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+				if(moveDirection.x > 0)
+					CurrentDirection = ECharacterDirection.Right;
+				else
+					CurrentDirection = ECharacterDirection.Left;
 
 				pos.x = pos.x - moveDirection.x * Time.deltaTime * MovementSpeed;
 				pos.y = pos.y - moveDirection.y * Time.deltaTime * MovementSpeed;
 				this.transform.localPosition = pos;
 			}
+			
+			PlayMoveAnimation();
+		}
+		else if(CurrentState == ECharacterState.Idle)
+		{
+			PlayIdleAnimation();
+		}
+
+	}
+
+	void PlayIdleAnimation()
+	{
+		switch(CurrentDirection)
+		{
+			case ECharacterDirection.Left:
+				myAnimation.Play("idle_left");
+			break;
+			case ECharacterDirection.Right:
+				myAnimation.Play("idle_right");
+			break;
+		}
+	}
+
+	void PlayMoveAnimation()
+	{
+		switch(CurrentDirection)
+		{
+		case ECharacterDirection.Left:
+			myAnimation.Play("move_left");
+			break;
+		case ECharacterDirection.Right:
+			myAnimation.Play("move_right");
+			break;
 		}
 	}
 
