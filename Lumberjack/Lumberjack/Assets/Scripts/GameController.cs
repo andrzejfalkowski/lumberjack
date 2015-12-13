@@ -36,7 +36,10 @@ public class GameController : MonoBehaviour
 	GameObject gameplayObject;
 	[SerializeField]
 	GameObject mainMenuObject;
-	
+
+	public bool LPM = true;
+	public bool RPM = true;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -47,7 +50,8 @@ public class GameController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		LPM = Input.GetMouseButton(0);
+		RPM = Input.GetMouseButton(1);
 	}
 
 	public void StartGame()

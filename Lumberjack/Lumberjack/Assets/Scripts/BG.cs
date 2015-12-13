@@ -8,12 +8,11 @@ public class BG : MonoBehaviour
 	[SerializeField]
 	private Texture2D blockedCursor;
 
-	bool clicked = false;
 	bool inArea = false;
 
 	void Update()
 	{
-		if(clicked && inArea)
+		if(GameController.Instance.LPM && inArea)
 		{
 			//Debug.Log ("Clicked on " + this.gameObject.name);
 			float mouseX = (Input.mousePosition.x);
@@ -41,15 +40,5 @@ public class BG : MonoBehaviour
 			//Cursor.SetCursor(blockedCursor, Vector2.zero, CursorMode.Auto);
 		}
 		inArea = false;
-	}
-
-	void OnMouseDown()
-	{
-		clicked = true;
-	}
-
-	void OnMouseUp()
-	{
-		clicked = false;
 	}
 }

@@ -28,6 +28,8 @@ public class ControllableCharacter : MonoBehaviour
 	public string Name = "Name";
 	
 	public float MovementSpeed = 1f;
+	public float HP = 10f;
+
 
 	public ECharacterCondition CurrentCondition = ECharacterCondition.Alive;
 	public ECharacterState CurrentState = ECharacterState.Idle;
@@ -37,7 +39,7 @@ public class ControllableCharacter : MonoBehaviour
 	private Animator myAnimation;
 
 	public Vector3 Destination;
-	public EnemyTree TargetTree;
+	public EnemyTree TargetTree = null;
 
 	public List<EnemyTree> CollidingTrees = new List<EnemyTree>();
 
@@ -48,22 +50,43 @@ public class ControllableCharacter : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate() 
-	{	
-		if(Input.GetMouseButtonDown(1) && CurrentState != ECharacterState.Attacking && PreviousState != ECharacterState.Attacking)
-		{
-			PreviousState = CurrentState;
-			CurrentState = ECharacterState.Attacking;
-			PlayAttackAnimation();
-		}
-		else
-		{
-			PreviousState = CurrentState;
-		}
-	}
+//	void FixedUpdate() 
+//	{	
+//		if(Input.GetMouseButtonDown(1) && CurrentState != ECharacterState.Attacking && PreviousState != ECharacterState.Attacking)
+//		{
+//			PreviousState = CurrentState;
+//			CurrentState = ECharacterState.Attacking;
+//			PlayAttackAnimation();
+//		}
+//		else
+//		{
+//			PreviousState = CurrentState;
+//		}
+//	}
 
 	void Update()
 	{
+		if(TargetTree != null)
+		{
+			if(CollidingTrees.Contains(TargetTree))
+			{
+	//			if(CurrentState != ECharacterState.Attacking && PreviousState != ECharacterState.Attacking)
+	//			{
+				PreviousState = CurrentState;
+				CurrentState = ECharacterState.Attacking;
+				PlayAttackAnimation();
+	//			}
+	//			else
+	//			{
+	//				PreviousState = CurrentState;
+	//			}
+			}
+			else
+			{
+				PreviousState = CurrentState;
+			}
+		}
+
 		if(CurrentState == ECharacterState.Moving)
 		{
 			Vector3 pos = this.transform.localPosition;
@@ -175,9 +198,6 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void GoToSpot(Vector3 target)
 	{
-		if(CurrentState == ECharacterState.Attacking)
-			return;
-
 		Destination = target;
 
 		PreviousState = CurrentState;
@@ -193,19 +213,19 @@ public class ControllableCharacter : MonoBehaviour
 		CurrentState = ECharacterState.Moving;
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
-	{
-		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
-		if(tree != null && !CollidingTrees.Contains(tree))
-			CollidingTrees.Add(tree);
-	}
-
-	void OnCollisionExit2D(Collision2D collision)
-	{
-		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
-		if(tree != null && CollidingTrees.Contains(tree))
-			CollidingTrees.Remove(tree);
-	}
+//	void OnCollisionEnter2D(Collision2D collision)
+//	{
+//		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
+//		if(tree != null && !CollidingTrees.Contains(tree))
+//			CollidingTrees.Add(tree);
+//	}
+//
+//	void OnCollisionExit2D(Collision2D collision)
+//	{
+//		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
+//		if(tree != null && CollidingTrees.Contains(tree))
+//			CollidingTrees.Remove(tree);
+//	}
 
 	public void HandleAttackFinished()
 	{

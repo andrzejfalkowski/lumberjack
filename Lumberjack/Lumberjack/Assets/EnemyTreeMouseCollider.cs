@@ -10,7 +10,7 @@ public class EnemyTreeMouseCollider : MonoBehaviour
 	
 	void Update()
 	{
-		if(clicked && inArea)
+		if(GameController.Instance.LPM && inArea)
 		{
 			GameController.Instance.MainCharacter.Attack(ParentTree);
 		}
@@ -26,15 +26,5 @@ public class EnemyTreeMouseCollider : MonoBehaviour
 	{
 		inArea = false;
 		ParentTree.MyAnimation.DeFlash();
-	}
-	
-	void OnMouseDown()
-	{
-		clicked = true;
-	}
-	
-	void OnMouseUp()
-	{
-		clicked = false;
 	}
 }
