@@ -22,9 +22,11 @@ public class BombSpawner : MonoBehaviour
 		{
 
 			Vector2 targetPoint = new Vector2(Random.Range(-9f, 9f), Random.Range(-5f, 3f));
-			while(!GameController.Instance.PlayableArea.OverlapPoint(targetPoint))
+			int cnt = 0;
+			while(!GameController.Instance.PlayableArea.OverlapPoint(targetPoint) && cnt < 10)
 			{
 				targetPoint = new Vector2(Random.Range(-9f, 9f), Random.Range(-5f, 3f));
+				cnt++;
 			}
 
 			GameObject bombObject = Instantiate<GameObject>(BombPrefab);

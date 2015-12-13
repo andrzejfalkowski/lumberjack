@@ -37,6 +37,9 @@ public class ControllableCharacter : MonoBehaviour
 	private Animator myAnimation;
 
 	public Vector3 Destination;
+	public EnemyTree TargetTree;
+
+	public List<EnemyTree> CollidingTrees = new List<EnemyTree>();
 
 	// Use this for initialization
 	void Start () 
@@ -45,7 +48,7 @@ public class ControllableCharacter : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void FixedUpdate() 
 	{	
 		if(Input.GetMouseButtonDown(1) && CurrentState != ECharacterState.Attacking && PreviousState != ECharacterState.Attacking)
 		{
@@ -57,7 +60,10 @@ public class ControllableCharacter : MonoBehaviour
 		{
 			PreviousState = CurrentState;
 		}
+	}
 
+	void Update()
+	{
 		if(CurrentState == ECharacterState.Moving)
 		{
 			Vector3 pos = this.transform.localPosition;
@@ -178,9 +184,27 @@ public class ControllableCharacter : MonoBehaviour
 		CurrentState = ECharacterState.Moving;
 	}
 
-	void OnCollisionEnter(Collision collision)
+	public void Attack(EnemyTree target)
 	{
-		Debug.Log ("Collision!");
+		TargetTree = target;
+		Destination = target.transform.position;
+		
+		PreviousState = CurrentState;
+		CurrentState = ECharacterState.Moving;
+	}
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
+		if(tree != null && !CollidingTrees.Contains(tree))
+			CollidingTrees.Add(tree);
+	}
+
+	void OnCollisionExit2D(Collision2D collision)
+	{
+		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
+		if(tree != null && CollidingTrees.Contains(tree))
+			CollidingTrees.Remove(tree);
 	}
 
 	public void HandleAttackFinished()
@@ -188,5 +212,11 @@ public class ControllableCharacter : MonoBehaviour
 		PreviousState = CurrentState;
 		CurrentState = ECharacterState.Idle;
 		PlayIdleAnimation();
+		List<EnemyTree> trees = new List<EnemyTree>();
+		trees.AddRange(CollidingTrees);
+		foreach(var tree in trees)
+		{
+			tree.DecreaseHP();
+		}
 	}
 }

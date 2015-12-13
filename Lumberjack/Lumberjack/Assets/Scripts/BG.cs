@@ -28,7 +28,7 @@ public class BG : MonoBehaviour
 		if(GameController.Instance.MainCharacter.CurrentCondition != ECharacterCondition.Dead &&
 		   GameController.Instance.MainCharacter.CurrentState != ECharacterState.Idle)
 		{
-			Cursor.SetCursor(moveCursor, Vector2.zero, CursorMode.Auto);
+			//Cursor.SetCursor(moveCursor, Vector2.zero, CursorMode.Auto);
 		}
 		inArea = true;
 	}
@@ -38,7 +38,7 @@ public class BG : MonoBehaviour
 		if(GameController.Instance.MainCharacter.CurrentCondition != ECharacterCondition.Dead &&
 		   GameController.Instance.MainCharacter.CurrentState != ECharacterState.Idle)
 		{
-			Cursor.SetCursor(blockedCursor, Vector2.zero, CursorMode.Auto);
+			//Cursor.SetCursor(blockedCursor, Vector2.zero, CursorMode.Auto);
 		}
 		inArea = false;
 	}

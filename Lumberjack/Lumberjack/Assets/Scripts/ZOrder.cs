@@ -9,6 +9,11 @@ public class ZOrder : MonoBehaviour
 	[SerializeField]
 	int modifier = 0;
 
+	[SerializeField]
+	private List<Collider2D> colliders = new List<Collider2D>();
+	[SerializeField]
+	int colliderModifier = 0;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -25,6 +30,13 @@ public class ZOrder : MonoBehaviour
 		{
 			spriteRenderer.sortingOrder = order + cnt;
 			cnt++;
+		}
+
+		foreach(var collider in colliders)
+		{
+			Vector3 pos = collider.transform.localPosition;
+			pos.z = this.transform.position.y + colliderModifier;
+			collider.transform.localPosition = pos;
 		}
 	}
 }
