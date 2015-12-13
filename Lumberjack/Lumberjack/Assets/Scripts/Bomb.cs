@@ -12,6 +12,7 @@ public class Bomb : MonoBehaviour
 	public Vector3 Destination;
 
 	public GameObject BombSpawnPrefab;
+	public GameObject ExplosionPrefab;
 
 	// Use this for initialization
 	void Start () 
@@ -43,6 +44,11 @@ public class Bomb : MonoBehaviour
 					spawnedObject.transform.position = this.transform.position;
 					GameController.Instance.SpawnedTrees.Add(spawnedObject.GetComponent<EnemyTree>());
 				}
+			}
+			if(ExplosionPrefab != null)
+			{
+				GameObject spawnedObject = Instantiate<GameObject>(ExplosionPrefab);
+				spawnedObject.transform.position = this.transform.position;
 			}
 			DestroyImmediate(this.gameObject);
 		}

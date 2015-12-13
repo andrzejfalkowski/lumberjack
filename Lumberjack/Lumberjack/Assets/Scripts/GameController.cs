@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour
 	GameObject gameplayObject;
 	[SerializeField]
 	GameObject mainMenuObject;
-
+	
 	// Use this for initialization
 	void Start () 
 	{
