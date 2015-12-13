@@ -18,7 +18,9 @@ public enum ECharacterState
 public enum ECharacterDirection
 {
 	Left,
-	Right
+	Right,
+	Up,
+	Down
 }
 
 public class ControllableCharacter : MonoBehaviour 
@@ -29,6 +31,7 @@ public class ControllableCharacter : MonoBehaviour
 
 	public ECharacterCondition CurrentCondition = ECharacterCondition.Alive;
 	public ECharacterState CurrentState = ECharacterState.Idle;
+	public ECharacterState PreviousState = ECharacterState.Idle;
 	public ECharacterDirection CurrentDirection = ECharacterDirection.Left;
 
 	private Animator myAnimation;
@@ -44,6 +47,17 @@ public class ControllableCharacter : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{	
+		if(Input.GetMouseButtonDown(1) && CurrentState != ECharacterState.Attacking && PreviousState != ECharacterState.Attacking)
+		{
+			PreviousState = CurrentState;
+			CurrentState = ECharacterState.Attacking;
+			PlayAttackAnimation();
+		}
+		else
+		{
+			PreviousState = CurrentState;
+		}
+
 		if(CurrentState == ECharacterState.Moving)
 		{
 			Vector3 pos = this.transform.localPosition;
@@ -51,6 +65,7 @@ public class ControllableCharacter : MonoBehaviour
 			   Mathf.Abs(Destination.y - pos.y) < 0.1f)
 			{
 				//GameController.Instance.CharacterActionEnd(this);
+				PreviousState = CurrentState;
 				CurrentState = ECharacterState.Idle;
 			}
 			else
@@ -62,10 +77,14 @@ public class ControllableCharacter : MonoBehaviour
 				//float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg + 90f;
 				//this.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-				if(moveDirection.x > 0)
+				if(moveDirection.x < 0 && Mathf.Abs(moveDirection.x) > Mathf.Abs(moveDirection.y))
 					CurrentDirection = ECharacterDirection.Right;
-				else
+				else if(moveDirection.x >= 0 && Mathf.Abs(moveDirection.x) > Mathf.Abs(moveDirection.y))
 					CurrentDirection = ECharacterDirection.Left;
+				else if(moveDirection.y < 0)
+					CurrentDirection = ECharacterDirection.Up;
+				else if(moveDirection.y >= 0)
+					CurrentDirection = ECharacterDirection.Down;
 
 				pos.x = pos.x - moveDirection.x * Time.deltaTime * MovementSpeed;
 				pos.y = pos.y - moveDirection.y * Time.deltaTime * MovementSpeed;
@@ -91,6 +110,31 @@ public class ControllableCharacter : MonoBehaviour
 			case ECharacterDirection.Right:
 				myAnimation.Play("idle_right");
 			break;
+			case ECharacterDirection.Up:
+				myAnimation.Play("idle_up");
+			break;
+			case ECharacterDirection.Down:
+				myAnimation.Play("idle_down");
+			break;
+		}
+	}
+
+	void PlayAttackAnimation()
+	{
+		switch(CurrentDirection)
+		{
+		case ECharacterDirection.Left:
+			myAnimation.Play("attack_left");
+			break;
+		case ECharacterDirection.Right:
+			myAnimation.Play("attack_right");
+			break;
+		case ECharacterDirection.Up:
+			myAnimation.Play("attack_up");
+			break;
+		case ECharacterDirection.Down:
+			myAnimation.Play("attack_down");
+			break;
 		}
 	}
 
@@ -103,6 +147,12 @@ public class ControllableCharacter : MonoBehaviour
 			break;
 		case ECharacterDirection.Right:
 			myAnimation.Play("move_right");
+			break;
+		case ECharacterDirection.Up:
+			myAnimation.Play("move_up");
+			break;
+		case ECharacterDirection.Down:
+			myAnimation.Play("move_down");
 			break;
 		}
 	}
@@ -119,13 +169,24 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void GoToSpot(Vector3 target)
 	{
+		if(CurrentState == ECharacterState.Attacking)
+			return;
+
 		Destination = target;
 
+		PreviousState = CurrentState;
 		CurrentState = ECharacterState.Moving;
 	}
 
 	void OnCollisionEnter(Collision collision)
 	{
 		Debug.Log ("Collision!");
+	}
+
+	public void HandleAttackFinished()
+	{
+		PreviousState = CurrentState;
+		CurrentState = ECharacterState.Idle;
+		PlayIdleAnimation();
 	}
 }

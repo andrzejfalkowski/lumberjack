@@ -57,6 +57,8 @@ public class GameController : MonoBehaviour
 		mainMenuObject.SetActive(false);
 		gameplayObject.SetActive(true);
 
+		MusicController.Instance.Play();
+
 		CurrentGamePhase = EGamePhase.InProgress;
 	}
 
