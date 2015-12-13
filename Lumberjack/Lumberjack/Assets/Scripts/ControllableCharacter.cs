@@ -123,4 +123,9 @@ public class ControllableCharacter : MonoBehaviour
 
 		CurrentState = ECharacterState.Moving;
 	}
+
+	void OnCollisionEnter(Collision collision)
+	{
+		Debug.Log ("Collision!");
+	}
 }

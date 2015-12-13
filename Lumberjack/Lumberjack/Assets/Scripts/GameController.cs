@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum EGamePhase
 {
+	Menu,
 	Prepare,
 	InProgress,
 	GameOver
@@ -23,23 +25,38 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	public EGamePhase CurrentGamePhase = EGamePhase.Prepare;
+	public EGamePhase CurrentGamePhase = EGamePhase.Menu;
 
 	public ControllableCharacter MainCharacter;
 	public Collider2D PlayableArea;
 
+	public List<EnemyTree> SpawnedTrees = new List<EnemyTree>();
+
+	[SerializeField]
+	GameObject gameplayObject;
+	[SerializeField]
+	GameObject mainMenuObject;
+
 	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+	{
+		mainMenuObject.SetActive(true);
+		gameplayObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 	
 	}
 
 	public void StartGame()
 	{
+		SpawnedTrees.Clear();
+
+		mainMenuObject.SetActive(false);
+		gameplayObject.SetActive(true);
+
 		CurrentGamePhase = EGamePhase.InProgress;
 	}
 

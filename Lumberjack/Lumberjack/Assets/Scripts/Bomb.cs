@@ -28,8 +28,21 @@ public class Bomb : MonoBehaviour
 		{
 			if(BombSpawnPrefab != null)
 			{
-				GameObject spawnedObject = Instantiate<GameObject>(BombSpawnPrefab);
-				spawnedObject.transform.position = this.transform.position;
+				bool blocked = false;
+				foreach(var tree in GameController.Instance.SpawnedTrees)
+				{
+					if(tree.GetComponent<Collider2D>().OverlapPoint(this.transform.position))
+					{
+						blocked = true;
+						break;
+					}
+				}
+				if(!blocked)
+				{
+					GameObject spawnedObject = Instantiate<GameObject>(BombSpawnPrefab);
+					spawnedObject.transform.position = this.transform.position;
+					GameController.Instance.SpawnedTrees.Add(spawnedObject.GetComponent<EnemyTree>());
+				}
 			}
 			DestroyImmediate(this.gameObject);
 		}

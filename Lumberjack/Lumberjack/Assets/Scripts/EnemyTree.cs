@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyTree : MonoBehaviour {
+public class EnemyTree : MonoBehaviour 
+{
+	public EnemyTreeAnimation MyAnimation;
 
-	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+	{
+		if(MyAnimation != null)
+			MyAnimation.PlayGrowAnimation();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	public void PlayGrowAnimation()
+	{
+		MyAnimation.PlayGrowAnimation();
+	}
 	
+	public void PlayIdleAnimation()
+	{
+		MyAnimation.PlayIdleAnimation();
 	}
 }

@@ -1,19 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ZOrder : MonoBehaviour 
 {
-	private SpriteRenderer spriteRenderer;
+	[SerializeField]
+	private List<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();
 
 	// Use this for initialization
 	void Start () 
 	{
-		spriteRenderer = GetComponent<SpriteRenderer>();
+		if(spriteRenderers.Count == 0)
+			spriteRenderers.Add(GetComponent<SpriteRenderer>());
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		spriteRenderer.sortingOrder = (int)((10f - this.transform.position.y) * 1000f);
+		int order = (int)((10f - this.transform.position.y) * 1000f);
+		int cnt = 0;
+		foreach(var spriteRenderer in spriteRenderers)
+		{
+			spriteRenderer.sortingOrder = order + cnt;
+			cnt++;
+		}
 	}
 }
