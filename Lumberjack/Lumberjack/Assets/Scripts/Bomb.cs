@@ -48,17 +48,17 @@ public class Bomb : MonoBehaviour
 			pos.y = pos.y - moveDirection.y * Time.deltaTime * MovementSpeed;
 			this.transform.localPosition = pos;
 
-			int sortingOrder = GameController.Instance.MainCharacter.GetComponent<SpriteRenderer>().sortingOrder;
-			if(GameController.Instance.MainCharacter.transform.position.y < this.transform.position.y)
-			{
-				shadowGraphic.sortingOrder = sortingOrder - 1;
-				BombGraphic.sortingOrder = sortingOrder - 1;
-			}
-			else
-			{
-				shadowGraphic.sortingOrder = sortingOrder + 1;
-				BombGraphic.sortingOrder = sortingOrder + 1;
-			}
+//			int sortingOrder = GameController.Instance.MainCharacter.GetComponent<SpriteRenderer>().sortingOrder;
+//			if(GameController.Instance.MainCharacter.transform.position.y < this.transform.position.y)
+//			{
+//				shadowGraphic.sortingOrder = sortingOrder - 1;
+//				BombGraphic.sortingOrder = sortingOrder - 1;
+//			}
+//			else
+//			{
+//				shadowGraphic.sortingOrder = sortingOrder + 1;
+//				BombGraphic.sortingOrder = sortingOrder + 1;
+//			}
 		}
 	}
 }
