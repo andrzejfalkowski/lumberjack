@@ -24,7 +24,9 @@ public class GameController : MonoBehaviour
 	}
 
 	public EGamePhase CurrentGamePhase = EGamePhase.Prepare;
+
 	public ControllableCharacter MainCharacter;
+	public Collider2D PlayableArea;
 
 	// Use this for initialization
 	void Start () {
