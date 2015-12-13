@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,9 +34,16 @@ public class GameController : MonoBehaviour
 	public List<EnemyTree> SpawnedTrees = new List<EnemyTree>();
 
 	[SerializeField]
-	GameObject gameplayObject;
+	GameObject gameplayPrefab;
+	public GameObject GameplayObject;
 	[SerializeField]
 	GameObject mainMenuObject;
+	[SerializeField]
+	GameObject gameOverObject;
+
+	public Image HealthBar;
+	public Text PointsLabel;
+	public int Points;
 
 	public bool LPM = true;
 	public bool RPM = true;
@@ -43,8 +51,11 @@ public class GameController : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		DestroyImmediate(GameplayObject);
+
 		mainMenuObject.SetActive(true);
-		gameplayObject.SetActive(false);
+		//gameplayObject.SetActive(false);
+		gameOverObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -56,10 +67,31 @@ public class GameController : MonoBehaviour
 
 	public void StartGame()
 	{
+		foreach(var tree in SpawnedTrees)
+		{
+			if(tree != null )
+			{
+				DestroyImmediate(tree);
+			}
+		}
+
 		SpawnedTrees.Clear();
 
+		if(GameplayObject != null)
+			DestroyImmediate(GameplayObject);
+
+		GameplayObject = Instantiate<GameObject>(gameplayPrefab);
+		GameplayObject.transform.SetParent(this.transform);
+
 		mainMenuObject.SetActive(false);
-		gameplayObject.SetActive(true);
+		GameplayObject.SetActive(true);
+		gameOverObject.SetActive(false);
+
+		MainCharacter = GetComponentInChildren<ControllableCharacter>();
+		PlayableArea = GetComponentInChildren<BG>().GetComponent<Collider2D>();
+
+		Points = 0;
+		PointsLabel.text = Points.ToString();
 
 		MusicController.Instance.Play();
 
@@ -68,6 +100,10 @@ public class GameController : MonoBehaviour
 
 	public void EndGame()
 	{
+		mainMenuObject.SetActive(false);
+		//gameplayObject.SetActive(false);
+		gameOverObject.SetActive(true);
+
 		CurrentGamePhase = EGamePhase.GameOver;
 	}
 }

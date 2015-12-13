@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -25,11 +26,9 @@ public enum ECharacterDirection
 
 public class ControllableCharacter : MonoBehaviour 
 {
-	public string Name = "Name";
-	
 	public float MovementSpeed = 1f;
+	const float MAX_HP = 10f;
 	public float HP = 10f;
-
 
 	public ECharacterCondition CurrentCondition = ECharacterCondition.Alive;
 	public ECharacterState CurrentState = ECharacterState.Idle;
@@ -46,6 +45,7 @@ public class ControllableCharacter : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
 		myAnimation = GetComponent<Animator>();
 	}
 	
@@ -237,6 +237,16 @@ public class ControllableCharacter : MonoBehaviour
 		foreach(var tree in trees)
 		{
 			tree.DecreaseHP();
+		}
+	}
+
+	public void DecreaseHP(float damage = 1f)
+	{
+		HP -= damage;
+		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
+		if(HP <= 0f)
+		{
+			GameController.Instance.EndGame();
 		}
 	}
 }

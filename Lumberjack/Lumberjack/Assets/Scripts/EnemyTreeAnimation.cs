@@ -27,7 +27,7 @@ public class EnemyTreeAnimation : MonoBehaviour
 
 	public void Flash()
 	{
-		myRenderer.material.SetFloat("_FlashAmount", 0.3f); 
+		myRenderer.material.SetFloat("_FlashAmount", 0.15f); 
 	}
 
 	public void DeFlash()

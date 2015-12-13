@@ -31,6 +31,10 @@ public class EnemyTree : MonoBehaviour
 				GameController.Instance.SpawnedTrees.Remove(this);
 			if(GameController.Instance.MainCharacter.CollidingTrees.Contains(this))
 				GameController.Instance.MainCharacter.CollidingTrees.Remove(this);
+
+			GameController.Instance.Points++;
+			GameController.Instance.PointsLabel.text = GameController.Instance.Points.ToString();
+
 			Destroy(this.gameObject);
 		}
 	}

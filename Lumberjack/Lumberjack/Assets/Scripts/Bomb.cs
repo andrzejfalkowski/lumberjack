@@ -5,6 +5,7 @@ public class Bomb : MonoBehaviour
 {
 	public float MovementSpeed = 5f;
 	public float Height = 1.1f;
+	public float Damage = 1f;
 	private float startDistance = 0f;
 
 	public SpriteRenderer BombGraphic;
@@ -20,7 +21,17 @@ public class Bomb : MonoBehaviour
 		startDistance = (this.transform.localPosition - Destination).magnitude;
 		shadowGraphic = this.GetComponent<SpriteRenderer>();
 	}
-	
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		ControllableCharacter character = collision.collider.GetComponent<ControllableCharacter>();
+		if(character != null && Damage > 0f)
+		{
+			character.DecreaseHP(Damage);
+			Destroy(this.gameObject);
+		}
+	}
+
 	void Update () 
 	{	
 		Vector3 pos = this.transform.localPosition;
@@ -42,6 +53,7 @@ public class Bomb : MonoBehaviour
 				{
 					GameObject spawnedObject = Instantiate<GameObject>(BombSpawnPrefab);
 					spawnedObject.transform.position = pos;
+					spawnedObject.transform.SetParent(GameController.Instance.GameplayObject.transform);
 					GameController.Instance.SpawnedTrees.Add(spawnedObject.GetComponent<EnemyTree>());
 				}
 			}

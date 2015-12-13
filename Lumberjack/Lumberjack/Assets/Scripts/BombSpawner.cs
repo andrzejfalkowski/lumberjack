@@ -30,6 +30,7 @@ public class BombSpawner : MonoBehaviour
 			}
 
 			GameObject bombObject = Instantiate<GameObject>(BombPrefab);
+			bombObject.transform.SetParent(GameController.Instance.GameplayObject.transform);
 			bombObject.transform.position = this.transform.position;
 			Bomb bomb = bombObject.GetComponent<Bomb>();
 
