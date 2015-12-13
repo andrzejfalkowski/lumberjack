@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Bomb : MonoBehaviour 
 {
+	public bool Seed = false;
+
 	public float MovementSpeed = 5f;
 	public float Height = 1.1f;
 	public float Damage = 1f;
@@ -14,6 +16,8 @@ public class Bomb : MonoBehaviour
 
 	public GameObject BombSpawnPrefab;
 	public GameObject ExplosionPrefab;
+
+	public GameObject TreeSpawnPointPrefab;
 
 	// Use this for initialization
 	void Start () 
@@ -49,11 +53,22 @@ public class Bomb : MonoBehaviour
 						break;
 					}
 				}
+				foreach(var tree in GameController.Instance.TreeSpawnPoints)
+				{
+					if(tree != null && tree.GetComponent<Collider2D>().OverlapPoint(this.transform.position))
+					{
+						blocked = true;
+						break;
+					}
+				}
 				if(!blocked)
 				{
-					GameObject spawnedObject = Instantiate<GameObject>(BombSpawnPrefab);
+					GameObject spawnedObject = Instantiate<GameObject>(TreeSpawnPointPrefab);
 					spawnedObject.transform.position = pos;
 					spawnedObject.transform.SetParent(GameController.Instance.GameplayObject.transform);
+
+					spawnedObject.GetComponent<TreeSpawnPoint>().BombSpawnPrefab = BombSpawnPrefab;
+
 					GameController.Instance.SpawnedTrees.Add(spawnedObject.GetComponent<EnemyTree>());
 				}
 			}
@@ -61,6 +76,7 @@ public class Bomb : MonoBehaviour
 			{
 				GameObject spawnedObject = Instantiate<GameObject>(ExplosionPrefab);
 				spawnedObject.transform.position = this.transform.position;
+				spawnedObject.transform.SetParent(GameController.Instance.GameplayObject.transform);
 			}
 			DestroyImmediate(this.gameObject);
 		}

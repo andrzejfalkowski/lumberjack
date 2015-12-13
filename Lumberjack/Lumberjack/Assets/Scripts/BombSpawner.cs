@@ -20,14 +20,45 @@ public class BombSpawner : MonoBehaviour
 		cooldown -= Time.deltaTime;
 		if(cooldown < 0)
 		{
-
+			BG background = GameController.Instance.PlayableArea.GetComponent<BG>();
 			Vector2 targetPoint = new Vector2(Random.Range(-9f, 9f), Random.Range(-5f, 3f));
 			int cnt = 0;
-			while(!GameController.Instance.PlayableArea.OverlapPoint(targetPoint) && cnt < 10)
+			bool blocked = false;
+			if(BombPrefab.GetComponent<Bomb>().Seed)
 			{
+				Debug.Log (background.BlockColliders.Count);
+				foreach(var block in background.BlockColliders)
+				{
+					if(block.OverlapPoint(targetPoint))
+					{
+						Debug.Log ("blocked!");
+						blocked = true;
+						break;
+					}
+				}
+			}
+			while(!GameController.Instance.PlayableArea.OverlapPoint(targetPoint) && blocked && cnt < 10)
+			{
+				blocked = false;
+				if(BombPrefab.GetComponent<Bomb>().Seed)
+				{
+					Debug.Log (background.BlockColliders.Count);
+					foreach(var block in background.BlockColliders)
+					{
+						if(block.OverlapPoint(targetPoint))
+						{
+							Debug.Log ("blocked!");
+							blocked = true;
+							break;
+						}
+					}
+				}
 				targetPoint = new Vector2(Random.Range(-9f, 9f), Random.Range(-5f, 3f));
 				cnt++;
 			}
+
+			if(!GameController.Instance.PlayableArea.OverlapPoint(targetPoint) || blocked)
+			   return;
 
 			GameObject bombObject = Instantiate<GameObject>(BombPrefab);
 			bombObject.transform.SetParent(GameController.Instance.GameplayObject.transform);

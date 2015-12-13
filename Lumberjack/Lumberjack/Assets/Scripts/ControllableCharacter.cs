@@ -13,7 +13,8 @@ public enum ECharacterState
 {
 	Idle,
 	Moving,
-	Attacking
+	Attacking,
+	Dying
 }
 
 public enum ECharacterDirection
@@ -36,12 +37,15 @@ public class ControllableCharacter : MonoBehaviour
 	public ECharacterDirection CurrentDirection = ECharacterDirection.Left;
 
 	private Animator myAnimation;
+	public RedBlink MyBlink;
 
 	public Vector3 Destination;
 	public EnemyTree TargetTree = null;
 
 	public List<EnemyTree> CollidingTrees = new List<EnemyTree>();
 
+	public List<GameObject> DamagePoints = new List<GameObject>();
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -66,6 +70,9 @@ public class ControllableCharacter : MonoBehaviour
 
 	void Update()
 	{
+		if(CurrentState == ECharacterState.Dying)
+			return;
+
 		if(TargetTree != null)
 		{
 			if(CollidingTrees.Contains(TargetTree))
@@ -198,6 +205,9 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void GoToSpot(Vector3 target)
 	{
+		if(CurrentState == ECharacterState.Dying)
+			return;
+
 		Destination = target;
 
 		PreviousState = CurrentState;
@@ -206,6 +216,9 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void Attack(EnemyTree target)
 	{
+		if(CurrentState == ECharacterState.Dying)
+			return;
+
 		TargetTree = target;
 		Destination = target.transform.position;
 		
@@ -244,8 +257,11 @@ public class ControllableCharacter : MonoBehaviour
 	{
 		HP -= damage;
 		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
+		MyBlink.Blink();
 		if(HP <= 0f)
 		{
+			CurrentState = ECharacterState.Dying;
+			myAnimation.Play("die");
 			GameController.Instance.EndGame();
 		}
 	}

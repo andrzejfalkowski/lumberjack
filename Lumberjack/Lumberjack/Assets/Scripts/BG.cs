@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BG : MonoBehaviour 
 {
@@ -7,8 +9,16 @@ public class BG : MonoBehaviour
 	private Texture2D moveCursor;
 	[SerializeField]
 	private Texture2D blockedCursor;
+	public GameObject BlockCollidersObject;
+	public List<Collider2D> BlockColliders = new List<Collider2D>();
+
 
 	bool inArea = false;
+
+	void Start()
+	{
+		BlockColliders = BlockCollidersObject.GetComponents<Collider2D>().ToList();
+	}
 
 	void Update()
 	{
