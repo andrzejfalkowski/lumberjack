@@ -14,7 +14,8 @@ public enum ECharacterState
 	Idle,
 	Moving,
 	Attacking,
-	Dying
+	Dying,
+	TakingSelfie
 }
 
 public enum ECharacterDirection
@@ -47,17 +48,23 @@ public class ControllableCharacter : MonoBehaviour
 	public List<Bomb> CollidingSeeds = new List<Bomb>();
 
 	public List<GameObject> DamagePoints = new List<GameObject>();
-	
+
+	public float ImmortalityTimer = 0f;
+
 	// Use this for initialization
 	void Start () 
 	{
+		ImmortalityTimer = 0f;
 		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
 		myAnimation = GetComponent<Animator>();
 	}
 
 	void Update()
 	{
-		if(CurrentState == ECharacterState.Dying)
+		if(ImmortalityTimer > 0f)
+			ImmortalityTimer -= Time.deltaTime;
+
+		if(CurrentState == ECharacterState.Dying || CurrentState == ECharacterState.TakingSelfie)
 			return;
 
 		if(TargetTree != null)
@@ -201,7 +208,7 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void GoToSpot(Vector3 target)
 	{
-		if(CurrentState == ECharacterState.Dying)
+		if(CurrentState == ECharacterState.Dying || CurrentState == ECharacterState.TakingSelfie)
 			return;
 
 		Destination = target;
@@ -212,7 +219,7 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void Attack(EnemyTree target)
 	{
-		if(CurrentState == ECharacterState.Dying)
+		if(CurrentState == ECharacterState.Dying || CurrentState == ECharacterState.TakingSelfie)
 			return;
 
 		TargetTree = target;
@@ -224,7 +231,7 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void AttackSeed(Bomb target)
 	{
-		if(CurrentState == ECharacterState.Dying)
+		if(CurrentState == ECharacterState.Dying || CurrentState == ECharacterState.TakingSelfie)
 			return;
 		
 		TargetSeed = target;
@@ -255,6 +262,9 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void DecreaseHP(float damage = 1f)
 	{
+		if(ImmortalityTimer > 0f)
+			return;
+
 		HP -= damage;
 		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
 		MyBlink.Blink();
@@ -276,5 +286,25 @@ public class ControllableCharacter : MonoBehaviour
 	public void PlayChopSound()
 	{
 		SoundsController.Instance.PlayChopSound();
+	}
+
+	public void TakeSelfie()
+	{
+		CurrentState = ECharacterState.TakingSelfie;
+		if(Random.Range (0, 9) < 3)
+			myAnimation.Play("selfie_1");
+		else if(Random.Range (0, 9) < 6)
+			myAnimation.Play("selfie_2");
+		else
+			myAnimation.Play("selfie_3");
+	}
+	
+	public void SelfieDone()
+	{
+		ImmortalityTimer = 5f;
+		CurrentState = ECharacterState.Idle;
+		PlayIdleAnimation();
+
+		GameController.Instance.FlashScript.Blink();
 	}
 }

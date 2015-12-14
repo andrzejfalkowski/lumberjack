@@ -115,6 +115,8 @@ public class BombSpawner : MonoBehaviour
 				bomb.BombSpawnPrefab = BombSpawnPrefab;
 			}
 
+			SoundsController.Instance.PlayLauncherSound();
+
 			cooldown = Random.Range (minCooldown, maxCooldown);
 		}
 	}

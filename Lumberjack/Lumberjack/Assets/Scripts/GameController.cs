@@ -46,6 +46,12 @@ public class GameController : MonoBehaviour
 
 	public Image HealthBar;
 	public Image HealthBarBG;
+
+	public Image SelfieBar;
+	public Image SelfieBarBG;
+
+	public Flash FlashScript;
+
 	public Text PointsLabel;
 	public Text LostLabel;
 	private int points = 0;
@@ -155,6 +161,8 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	public float SelfieMeter;
+
 	public KillCount MyKillCount;
 
 	public bool LPM = true;
@@ -179,8 +187,23 @@ public class GameController : MonoBehaviour
 
 		if(Input.GetKeyDown(KeyCode.Escape) && CurrentGamePhase == EGamePhase.InProgress)
 			Quit();
-		
+
+		if(CurrentGamePhase == EGamePhase.InProgress && SelfieMeter < 100f)
+		{
+			SelfieMeter -= Time.deltaTime;
+		}
+		SelfieBar.fillAmount = SelfieMeter/100f;
+
+		if( SelfieMeter >= 100f)
+		{
+			if(RPM)
+			{
+				MainCharacter.TakeSelfie();
+				SelfieMeter = 0f;
+			}
+		}
 	}
+
 
 	public void StartGame()
 	{
@@ -217,6 +240,8 @@ public class GameController : MonoBehaviour
 
 		Points = 0;
 		PointsLabel.text = Points.ToString();
+
+		SelfieMeter = 0f;
 
 		MusicController.Instance.PlayGamePlay();
 

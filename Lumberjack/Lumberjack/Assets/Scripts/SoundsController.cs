@@ -23,6 +23,8 @@ public class SoundsController : MonoBehaviour
 	}
 
 	public List<AudioClip> AnnouncementSoundList;
+	public AudioClip LauncherClip;
+
 	public AudioSource AnnouncementSoundSource;
 	public AudioSource ChopSoundSource;
 
@@ -35,6 +37,14 @@ public class SoundsController : MonoBehaviour
 	public void PlayChopSound()
 	{
 		ChopSoundSource.Play();
+	}
+
+	public void PlayLauncherSound()
+	{
+		AudioSource audioSrc = this.gameObject.AddComponent<AudioSource>();
+		audioSrc.clip = LauncherClip;
+		audioSrc.Play();
+		Destroy(audioSrc, 3f);
 	}
 
 	public void PlayAnnouncementSoundFromClip(AudioClip clip)

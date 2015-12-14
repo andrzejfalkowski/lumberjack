@@ -53,6 +53,8 @@ public class EnemyTree : MonoBehaviour
 			GameController.Instance.Points++;
 			GameController.Instance.PointsLabel.text = GameController.Instance.Points.ToString();
 
+			GameController.Instance.SelfieMeter =  Mathf.Min(100f, GameController.Instance.SelfieMeter + 10f);
+
 			Destroy(this.gameObject);
 		}
 	}
