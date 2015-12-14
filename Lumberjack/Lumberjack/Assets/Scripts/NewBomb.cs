@@ -84,6 +84,10 @@ public class NewBomb : MonoBehaviour
 			Color color = BombGraphic.color;
 			color.a = (1f - (pos.y - Destination.y)/Height) * 0.5f;
 			BombGraphic.color = color;
+
+			Vector3 scale = new Vector3(1f + 4f * ((pos.y - Destination.y)/Height), 1f + 4f * ((pos.y - Destination.y)/Height), 1f);
+			BombGraphic.transform.localScale = scale;
+
 			if(moveDirection.y < 0.1f)
 			{
 				Explode();
