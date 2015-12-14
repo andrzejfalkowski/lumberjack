@@ -46,6 +46,7 @@ public class GameController : MonoBehaviour
 
 	public Image HealthBar;
 	public Text PointsLabel;
+	public Text LostLabel;
 	public int Points;
 
 	public bool LPM = true;
@@ -116,6 +117,8 @@ public class GameController : MonoBehaviour
 		mainMenuObject.SetActive(false);
 		//gameplayObject.SetActive(false);
 		gameOverObject.SetActive(true);
+
+		LostLabel.text = string.Format("You've managed to chop down {0} cybertree minions.", Points.ToString());
 
 		CurrentGamePhase = EGamePhase.GameOver;
 	}

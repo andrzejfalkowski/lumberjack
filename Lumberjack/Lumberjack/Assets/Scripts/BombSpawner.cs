@@ -5,18 +5,42 @@ public class BombSpawner : MonoBehaviour
 {
 	public GameObject BombPrefab;
 	public GameObject BombSpawnPrefab;
+	
+	public float MinCooldownStart = 3f;
+	public float MaxCooldownStart  = 8f;
+	public float MinCooldownFinal = 1f;
+	public float MaxCooldownFinal  = 2f;
+	[SerializeField]
+	private float minCooldown;
+	[SerializeField]
+	private float maxCooldown;
+
+	public float DifficultyTimer = 30f;
+	private float diffTimer;
+	bool dynamicDiff = true;
 
 	private float cooldown = 2f;
 
 	// Use this for initialization
 	void Start () 
 	{
-	
+		minCooldown = MinCooldownStart;
+		maxCooldown = MaxCooldownStart;
+		diffTimer = DifficultyTimer;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+		if(dynamicDiff)
+		{
+			diffTimer -= Time.deltaTime;
+			minCooldown = MinCooldownFinal + (diffTimer/DifficultyTimer) * (MinCooldownStart - MinCooldownFinal);
+			maxCooldown = MaxCooldownFinal + (diffTimer/DifficultyTimer) * (MaxCooldownStart - MaxCooldownFinal);
+			if(diffTimer <= 0f)
+				dynamicDiff = false;
+		}
+
 		cooldown -= Time.deltaTime;
 		if(cooldown < 0)
 		{
@@ -26,12 +50,12 @@ public class BombSpawner : MonoBehaviour
 			bool blocked = false;
 			if(BombPrefab.GetComponent<Bomb>().Seed)
 			{
-				Debug.Log (background.BlockColliders.Count);
+				//Debug.Log (background.BlockColliders.Count);
 				foreach(var block in background.BlockColliders)
 				{
 					if(block.OverlapPoint(targetPoint))
 					{
-						Debug.Log ("blocked!");
+						//Debug.Log ("blocked!");
 						blocked = true;
 						break;
 					}
@@ -42,12 +66,12 @@ public class BombSpawner : MonoBehaviour
 				blocked = false;
 				if(BombPrefab.GetComponent<Bomb>().Seed)
 				{
-					Debug.Log (background.BlockColliders.Count);
+					//Debug.Log (background.BlockColliders.Count);
 					foreach(var block in background.BlockColliders)
 					{
 						if(block.OverlapPoint(targetPoint))
 						{
-							Debug.Log ("blocked!");
+							//Debug.Log ("blocked!");
 							blocked = true;
 							break;
 						}
@@ -68,7 +92,7 @@ public class BombSpawner : MonoBehaviour
 			bomb.Destination = targetPoint;
 			bomb.BombSpawnPrefab = BombSpawnPrefab;
 
-			cooldown = Random.Range (1f, 2f);
+			cooldown = Random.Range (minCooldown, maxCooldown);
 		}
 	}
 }

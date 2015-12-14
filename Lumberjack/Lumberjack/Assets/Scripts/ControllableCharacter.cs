@@ -262,7 +262,11 @@ public class ControllableCharacter : MonoBehaviour
 		{
 			CurrentState = ECharacterState.Dying;
 			myAnimation.Play("die");
-			GameController.Instance.EndGame();
 		}
+	}
+
+	public void Die()
+	{
+		GameController.Instance.EndGame();
 	}
 }
