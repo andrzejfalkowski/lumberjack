@@ -50,7 +50,6 @@ public class EnemyTree : MonoBehaviour
 			spawnedObject.transform.position = this.transform.position;
 			spawnedObject.transform.localScale = this.transform.localScale;
 
-
 			GameController.Instance.Points++;
 			GameController.Instance.PointsLabel.text = GameController.Instance.Points.ToString();
 

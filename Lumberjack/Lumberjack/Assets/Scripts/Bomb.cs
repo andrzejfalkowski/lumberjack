@@ -10,6 +10,7 @@ public class Bomb : MonoBehaviour
 	public float Damage = 1f;
 	private float startDistance = 0f;
 
+	public EnemyTreeAnimation MyAnimation;
 	public SpriteRenderer BombGraphic;
 	private SpriteRenderer shadowGraphic;
 	public Vector3 Destination;
@@ -94,18 +95,19 @@ public class Bomb : MonoBehaviour
 			pos.x = pos.x - moveDirection.x * Time.deltaTime * MovementSpeed;
 			pos.y = pos.y - moveDirection.y * Time.deltaTime * MovementSpeed;
 			this.transform.localPosition = pos;
+		}
+	}
 
-//			int sortingOrder = GameController.Instance.MainCharacter.GetComponent<SpriteRenderer>().sortingOrder;
-//			if(GameController.Instance.MainCharacter.transform.position.y < this.transform.position.y)
-//			{
-//				shadowGraphic.sortingOrder = sortingOrder - 1;
-//				BombGraphic.sortingOrder = sortingOrder - 1;
-//			}
-//			else
-//			{
-//				shadowGraphic.sortingOrder = sortingOrder + 1;
-//				BombGraphic.sortingOrder = sortingOrder + 1;
-//			}
+	public void DecreaseHP()
+	{		
+		if(GameController.Instance.MainCharacter.CollidingSeeds.Contains(this))
+			GameController.Instance.MainCharacter.CollidingSeeds.Remove(this);
+		if(this != null && this.gameObject != null)
+		{
+			GameController.Instance.Points++;
+			GameController.Instance.PointsLabel.text = GameController.Instance.Points.ToString();
+
+			Destroy(this.gameObject);
 		}
 	}
 }

@@ -41,8 +41,10 @@ public class ControllableCharacter : MonoBehaviour
 
 	public Vector3 Destination;
 	public EnemyTree TargetTree = null;
+	public Bomb TargetSeed = null;
 
 	public List<EnemyTree> CollidingTrees = new List<EnemyTree>();
+	public List<Bomb> CollidingSeeds = new List<Bomb>();
 
 	public List<GameObject> DamagePoints = new List<GameObject>();
 	
@@ -52,21 +54,6 @@ public class ControllableCharacter : MonoBehaviour
 		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
 		myAnimation = GetComponent<Animator>();
 	}
-	
-	// Update is called once per frame
-//	void FixedUpdate() 
-//	{	
-//		if(Input.GetMouseButtonDown(1) && CurrentState != ECharacterState.Attacking && PreviousState != ECharacterState.Attacking)
-//		{
-//			PreviousState = CurrentState;
-//			CurrentState = ECharacterState.Attacking;
-//			PlayAttackAnimation();
-//		}
-//		else
-//		{
-//			PreviousState = CurrentState;
-//		}
-//	}
 
 	void Update()
 	{
@@ -77,16 +64,24 @@ public class ControllableCharacter : MonoBehaviour
 		{
 			if(CollidingTrees.Contains(TargetTree))
 			{
-	//			if(CurrentState != ECharacterState.Attacking && PreviousState != ECharacterState.Attacking)
-	//			{
+
 				PreviousState = CurrentState;
 				CurrentState = ECharacterState.Attacking;
 				PlayAttackAnimation();
-	//			}
-	//			else
-	//			{
-	//				PreviousState = CurrentState;
-	//			}
+			}
+			else
+			{
+				PreviousState = CurrentState;
+			}
+		}
+
+		if(TargetSeed != null)
+		{
+			if(CollidingSeeds.Contains(TargetSeed))
+			{		
+				PreviousState = CurrentState;
+				CurrentState = ECharacterState.Attacking;
+				PlayAttackAnimation();
 			}
 			else
 			{
@@ -226,19 +221,17 @@ public class ControllableCharacter : MonoBehaviour
 		CurrentState = ECharacterState.Moving;
 	}
 
-//	void OnCollisionEnter2D(Collision2D collision)
-//	{
-//		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
-//		if(tree != null && !CollidingTrees.Contains(tree))
-//			CollidingTrees.Add(tree);
-//	}
-//
-//	void OnCollisionExit2D(Collision2D collision)
-//	{
-//		EnemyTree tree = collision.collider.GetComponent<EnemyTree>();
-//		if(tree != null && CollidingTrees.Contains(tree))
-//			CollidingTrees.Remove(tree);
-//	}
+	public void AttackSeed(Bomb target)
+	{
+		if(CurrentState == ECharacterState.Dying)
+			return;
+		
+		TargetSeed = target;
+		Destination = target.transform.position;
+		
+		PreviousState = CurrentState;
+		CurrentState = ECharacterState.Moving;
+	}
 
 	public void HandleAttackFinished()
 	{
@@ -250,6 +243,12 @@ public class ControllableCharacter : MonoBehaviour
 		foreach(var tree in trees)
 		{
 			tree.DecreaseHP();
+		}
+		List<Bomb> seeds = new List<Bomb>();
+		seeds.AddRange(CollidingSeeds);
+		foreach(var seed in seeds)
+		{
+			seed.DecreaseHP();
 		}
 	}
 
