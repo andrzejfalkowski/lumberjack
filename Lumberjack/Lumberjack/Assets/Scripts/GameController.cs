@@ -47,8 +47,45 @@ public class GameController : MonoBehaviour
 	public Image HealthBar;
 	public Text PointsLabel;
 	public Text LostLabel;
-	public int Points;
-	public Text KillsLabel;
+	private int points = 0;
+	public int Points
+	{
+		get { return points;}
+		set 
+		{ 
+			points = value;
+			if(points == 0)
+				MyKillCount.Show("","");
+			else if(points == 1)
+				MyKillCount.Show("FIRST SAP!", "1 KILL");
+			else if(points == 10)
+				MyKillCount.Show("EFFECT AXE!", "10 KILLS");
+			else if(points == 20)
+				MyKillCount.Show("TREEMENDOUS!", "20 KILLS");
+			else if(points == 30)
+				MyKillCount.Show("EXTREEMINATOR!", "30 KILLS");
+			else if(points == 40)
+				MyKillCount.Show("RUN, FOREST, RUN!", "40 KILLS");
+			else if(points == 50)
+				MyKillCount.Show("LEAF NO TREE ALIVE!", "50 KILLS");
+			else if(points == 60)
+				MyKillCount.Show("UNSTUMPABLE!", "60 KILLS");
+			else if(points == 70)
+				MyKillCount.Show("WOODICROUS!", "70 KILLS");
+			else if(points == 80)
+				MyKillCount.Show("CHOPPING SPREE!", "80 KILLS");
+			else if(points == 90)
+				MyKillCount.Show("WE'VE RUN OUT OF PUNS!", "90 KILLS");
+			else if(points == 100)
+				MyKillCount.Show("PAPER INDUSTRY!", "100 KILLS");
+			else if(points == 200)
+				MyKillCount.Show("OZON HOLE!", "200 KILLS");
+			else if(points == 500)
+				MyKillCount.Show("GLOBAL WARMING!", "500 KILLS");
+		}
+	}
+
+	public KillCount MyKillCount;
 
 	public bool LPM = true;
 	public bool RPM = true;
