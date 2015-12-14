@@ -21,6 +21,8 @@ public class BombSpawner : MonoBehaviour
 
 	private float cooldown = 2f;
 
+	public GameObject TrajectoryPoint;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -89,7 +91,18 @@ public class BombSpawner : MonoBehaviour
 			bombObject.transform.position = this.transform.position;
 			Bomb bomb = bombObject.GetComponent<Bomb>();
 
+			if(bomb.Damage > 0f && Random.Range(0, 10) > 5)
+			{
+				targetPoint = GameController.Instance.MainCharacter.transform.localPosition;
+				targetPoint.x += Random.Range (-0.1f, 0.1f);
+				targetPoint.y += Random.Range (-0.1f, 0.1f);
+			}
+
 			bomb.Destination = targetPoint;
+
+			if(TrajectoryPoint != null)
+				bomb.UpDestination = TrajectoryPoint.transform.position;
+
 			bomb.BombSpawnPrefab = BombSpawnPrefab;
 
 			cooldown = Random.Range (minCooldown, maxCooldown);

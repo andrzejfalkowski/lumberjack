@@ -48,6 +48,7 @@ public class GameController : MonoBehaviour
 	public Text PointsLabel;
 	public Text LostLabel;
 	public int Points;
+	public Text KillsLabel;
 
 	public bool LPM = true;
 	public bool RPM = true;
