@@ -148,6 +148,16 @@ public class NewBomb : MonoBehaviour
 				character.DecreaseHP(Damage);
 			}
 		}
+
+		AudioSource BombSfx = GetComponent<AudioSource>();
+		if(BombSfx != null)
+		{
+			AudioSource newBombSfx = SoundsController.Instance.gameObject.AddComponent<AudioSource>();
+			newBombSfx.clip = BombSfx.clip;
+			newBombSfx.Play();
+			Destroy(newBombSfx, 2f);
+		}
+
 		DestroyImmediate(this.gameObject);
 	}
 

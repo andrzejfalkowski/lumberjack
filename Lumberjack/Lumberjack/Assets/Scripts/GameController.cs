@@ -57,11 +57,20 @@ public class GameController : MonoBehaviour
 			if(points == 0)
 				MyKillCount.Show("","");
 			else if(points == 1)
+			{
 				MyKillCount.Show("FIRST SAP!", "1 KILL");
+				SoundsController.Instance.PlayAnnouncement(0);
+			}
 			else if(points == 10)
+			{
 				MyKillCount.Show("EFFECT AXE!", "10 KILLS");
+				SoundsController.Instance.PlayAnnouncement(0);
+			}
 			else if(points == 20)
+			{
 				MyKillCount.Show("TREEMENDOUS!", "20 KILLS");
+				SoundsController.Instance.PlayAnnouncement(0);
+			}
 			else if(points == 30)
 				MyKillCount.Show("EXTREEMINATOR!", "30 KILLS");
 			else if(points == 40)
@@ -106,6 +115,10 @@ public class GameController : MonoBehaviour
 	{
 		LPM = Input.GetMouseButton(0);
 		RPM = Input.GetMouseButton(1);
+
+		if(Input.GetKeyDown(KeyCode.Escape) && CurrentGamePhase == EGamePhase.InProgress)
+			Quit();
+		
 	}
 
 	public void StartGame()
@@ -144,7 +157,7 @@ public class GameController : MonoBehaviour
 		Points = 0;
 		PointsLabel.text = Points.ToString();
 
-		MusicController.Instance.Play();
+		MusicController.Instance.PlayGamePlay();
 
 		CurrentGamePhase = EGamePhase.InProgress;
 	}
@@ -155,6 +168,8 @@ public class GameController : MonoBehaviour
 		mainMenuObject.SetActive(false);
 		//gameplayObject.SetActive(false);
 		gameOverObject.SetActive(true);
+
+		MusicController.Instance.PLayMenu();
 
 		LostLabel.text = string.Format("You've managed to chop down {0} cybertree minions.", Points.ToString());
 
@@ -167,7 +182,9 @@ public class GameController : MonoBehaviour
 		mainMenuObject.SetActive(true);
 		GameplayObject.SetActive(false);
 		gameOverObject.SetActive(false);
-		
+
+		MusicController.Instance.PLayMenu();
+
 		CurrentGamePhase = EGamePhase.Menu;
 	}
 }

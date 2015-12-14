@@ -152,6 +152,7 @@ public class ControllableCharacter : MonoBehaviour
 
 	void PlayAttackAnimation()
 	{
+		//SoundsController.Instance.PlayChopSound();
 		switch(CurrentDirection)
 		{
 		case ECharacterDirection.Left:
@@ -267,5 +268,11 @@ public class ControllableCharacter : MonoBehaviour
 	public void Die()
 	{
 		GameController.Instance.EndGame();
+	}
+
+	
+	public void PlayChopSound()
+	{
+		SoundsController.Instance.PlayChopSound();
 	}
 }

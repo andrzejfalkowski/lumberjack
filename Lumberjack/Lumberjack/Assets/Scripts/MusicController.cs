@@ -16,12 +16,28 @@ public class MusicController : MonoBehaviour
 		}
 	}
 
+	public AudioClip GamePlayMusic;
+	public AudioClip MenuMusic;
 	private AudioSource audioSource;
+
+
 	// Use this for initialization
 	void Awake () 
 	{
 		if(audioSource == null)
 			audioSource = GetComponent<AudioSource>();
+	}
+
+	public void PlayGamePlay()
+	{
+		audioSource.clip = GamePlayMusic;
+		audioSource.Play();
+	}
+
+	public void PLayMenu()
+	{
+		audioSource.clip = MenuMusic;
+		audioSource.Play();
 	}
 
 	public void Play()
