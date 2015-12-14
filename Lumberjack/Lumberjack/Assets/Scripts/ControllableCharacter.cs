@@ -258,6 +258,8 @@ public class ControllableCharacter : MonoBehaviour
 		HP -= damage;
 		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
 		MyBlink.Blink();
+		GameController.Instance.HealthBar.GetComponent<RedBlink>().Blink();
+		GameController.Instance.HealthBarBG.GetComponent<RedBlink>().Blink();
 		if(HP <= 0f)
 		{
 			CurrentState = ECharacterState.Dying;
