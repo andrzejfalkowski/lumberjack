@@ -8,6 +8,7 @@ public class EnemyTree : MonoBehaviour
 	public EnemyTreeMouseCollider MyMouseCollider;
 	public BombSpawner MyBombSpawner;
 	public RedBlink MyBlink;
+	public Collider2D MyDamageCollider;
 
 	public GameObject DamagePrefab;
 	public GameObject DiePrefab;
@@ -53,7 +54,10 @@ public class EnemyTree : MonoBehaviour
 			GameController.Instance.Points++;
 			GameController.Instance.PointsLabel.text = GameController.Instance.Points.ToString();
 
+			float previous = GameController.Instance.SelfieMeter;
 			GameController.Instance.SelfieMeter =  Mathf.Min(100f, GameController.Instance.SelfieMeter + 10f);
+			if(previous < 100f && GameController.Instance.SelfieMeter >= 100f)
+				GameController.Instance.SelfieIconBlink.StartBlink();
 
 			Destroy(this.gameObject);
 		}

@@ -93,7 +93,7 @@ public class BombSpawner : MonoBehaviour
 			NewBomb newBomb = bombObject.GetComponent<NewBomb>();
 			if(newBomb != null)
 			{
-				if(newBomb.Damage > 0f && Random.Range(0, 10) > 5)
+				if(newBomb.Damage > 0f && Random.Range(0, 10) > 7)
 				{
 					targetPoint = GameController.Instance.MainCharacter.transform.localPosition;
 					targetPoint.x += Random.Range (-0.1f, 0.1f);

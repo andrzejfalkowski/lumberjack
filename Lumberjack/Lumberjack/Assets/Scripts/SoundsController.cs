@@ -27,6 +27,7 @@ public class SoundsController : MonoBehaviour
 
 	public AudioSource AnnouncementSoundSource;
 	public AudioSource ChopSoundSource;
+	public AudioSource ScreamSoundSource;
 
 	public void PlayAnnouncement(int sfx)
 	{
@@ -37,6 +38,11 @@ public class SoundsController : MonoBehaviour
 	public void PlayChopSound()
 	{
 		ChopSoundSource.Play();
+	}
+
+	public void PlayScreamSound()
+	{
+		ScreamSoundSource.Play();
 	}
 
 	public void PlayLauncherSound()

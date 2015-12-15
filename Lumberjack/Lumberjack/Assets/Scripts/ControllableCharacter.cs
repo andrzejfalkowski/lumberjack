@@ -29,8 +29,8 @@ public enum ECharacterDirection
 public class ControllableCharacter : MonoBehaviour 
 {
 	public float MovementSpeed = 1f;
-	const float MAX_HP = 10f;
-	public float HP = 10f;
+	const float MAX_HP = 5f;
+	public float HP = 5f;
 
 	public ECharacterCondition CurrentCondition = ECharacterCondition.Alive;
 	public ECharacterState CurrentState = ECharacterState.Idle;
@@ -62,7 +62,13 @@ public class ControllableCharacter : MonoBehaviour
 	void Update()
 	{
 		if(ImmortalityTimer > 0f)
+		{
 			ImmortalityTimer -= Time.deltaTime;
+			if(ImmortalityTimer <= 0f)
+			{
+				GetComponent<Blink>().StopBlink();
+			}
+		}
 
 		if(CurrentState == ECharacterState.Dying || CurrentState == ECharacterState.TakingSelfie)
 			return;
@@ -265,6 +271,8 @@ public class ControllableCharacter : MonoBehaviour
 		if(ImmortalityTimer > 0f)
 			return;
 
+		SoundsController.Instance.PlayScreamSound();
+
 		HP -= damage;
 		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
 		MyBlink.Blink();
@@ -290,10 +298,12 @@ public class ControllableCharacter : MonoBehaviour
 
 	public void TakeSelfie()
 	{
+		ImmortalityTimer = 6f;
 		CurrentState = ECharacterState.TakingSelfie;
-		if(Random.Range (0, 9) < 3)
+		int random = Random.Range (0, 9);
+		if(random< 3)
 			myAnimation.Play("selfie_1");
-		else if(Random.Range (0, 9) < 6)
+		else if(random < 6)
 			myAnimation.Play("selfie_2");
 		else
 			myAnimation.Play("selfie_3");
@@ -301,10 +311,11 @@ public class ControllableCharacter : MonoBehaviour
 	
 	public void SelfieDone()
 	{
-		ImmortalityTimer = 5f;
 		CurrentState = ECharacterState.Idle;
 		PlayIdleAnimation();
 
 		GameController.Instance.FlashScript.Blink();
+		GameController.Instance.SelfieIconBlink.StopBlink();
+		GetComponent<Blink>().StartBlink();
 	}
 }

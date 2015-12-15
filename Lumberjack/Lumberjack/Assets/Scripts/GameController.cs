@@ -43,6 +43,8 @@ public class GameController : MonoBehaviour
 	GameObject mainMenuObject;
 	[SerializeField]
 	GameObject gameOverObject;
+	[SerializeField]
+	GameObject tutorialObject;
 
 	public Image HealthBar;
 	public Image HealthBarBG;
@@ -51,6 +53,7 @@ public class GameController : MonoBehaviour
 	public Image SelfieBarBG;
 
 	public Flash FlashScript;
+	public Blink SelfieIconBlink;
 
 	public Text PointsLabel;
 	public Text LostLabel;
@@ -78,77 +81,77 @@ public class GameController : MonoBehaviour
 				MyKillCount.Show("CHOPPING SPREE!", "10 KILLS");
 				SoundsController.Instance.PlayAnnouncement(2);
 			}
-			else if(points == 15)
-			{
-				MyKillCount.Show("PLANTASTIC!", "15 KILLS");
-				SoundsController.Instance.PlayAnnouncement(3);
-			}
 			else if(points == 20)
 			{
-				MyKillCount.Show("AXE EFFECT!", "20 KILLS");
-				SoundsController.Instance.PlayAnnouncement(4);
-			}
-			else if(points == 25)
-			{
-				MyKillCount.Show("KILLING SPRUCE!", "25 KILLS");
-				SoundsController.Instance.PlayAnnouncement(5);
+				MyKillCount.Show("PLANTASTIC!", "20 KILLS");
+				SoundsController.Instance.PlayAnnouncement(3);
 			}
 			else if(points == 30)
 			{
-				MyKillCount.Show("TREEMENDOUS!", "30 KILLS");
-				SoundsController.Instance.PlayAnnouncement(6);
-			}
-			else if(points == 35)
-			{
-				MyKillCount.Show("EXTREEMINATOR!", "35 KILLS");
-				SoundsController.Instance.PlayAnnouncement(7);
+				MyKillCount.Show("AXE EFFECT!", "30 KILLS");
+				SoundsController.Instance.PlayAnnouncement(4);
 			}
 			else if(points == 40)
 			{
-				MyKillCount.Show("TREERRIFIC!", "40 KILLS");
-				SoundsController.Instance.PlayAnnouncement(8);
-			}
-			else if(points == 45)
-			{
-				MyKillCount.Show("UNSTUMPABLE!", "45 KILLS");
-				SoundsController.Instance.PlayAnnouncement(9);
+				MyKillCount.Show("KILLING SPRUCE!", "40 KILLS");
+				SoundsController.Instance.PlayAnnouncement(5);
 			}
 			else if(points == 50)
 			{
-				MyKillCount.Show("TREEDICULOUS!", "50 KILLS");
-				SoundsController.Instance.PlayAnnouncement(10);
+				MyKillCount.Show("TREEMENDOUS!", "50 KILLS");
+				SoundsController.Instance.PlayAnnouncement(6);
 			}
 			else if(points == 60)
 			{
-				MyKillCount.Show("LEAF NO TREE ALIVE!", "60 KILLS");
-				SoundsController.Instance.PlayAnnouncement(11);
+				MyKillCount.Show("EXTREEMINATOR!", "60 KILLS");
+				SoundsController.Instance.PlayAnnouncement(7);
 			}
 			else if(points == 70)
 			{
-				MyKillCount.Show("WOODICROUS!", "70 KILLS");
-				SoundsController.Instance.PlayAnnouncement(12);
+				MyKillCount.Show("TREERRIFIC!", "70 KILLS");
+				SoundsController.Instance.PlayAnnouncement(8);
 			}
 			else if(points == 80)
 			{
-				MyKillCount.Show("RUN, FOREST, RUN!", "80 KILLS");
-				SoundsController.Instance.PlayAnnouncement(13);
+				MyKillCount.Show("UNSTUMPABLE!", "80 KILLS");
+				SoundsController.Instance.PlayAnnouncement(9);
 			}
 			else if(points == 90)
 			{
-				MyKillCount.Show("PODLIKE!", "90 KILLS");
-				SoundsController.Instance.PlayAnnouncement(14);
+				MyKillCount.Show("TREEDICULOUS!", "90 KILLS");
+				SoundsController.Instance.PlayAnnouncement(10);
 			}
 			else if(points == 100)
 			{
-				MyKillCount.Show("WE'VE RUN OUT OF PUNS!", "100 KILLS");
-				SoundsController.Instance.PlayAnnouncement(15);
+				MyKillCount.Show("LEAF NO TREE ALIVE!", "100 KILLS");
+				SoundsController.Instance.PlayAnnouncement(11);
+			}
+			else if(points == 125)
+			{
+				MyKillCount.Show("WOODICROUS!", "125 KILLS");
+				SoundsController.Instance.PlayAnnouncement(12);
 			}
 			else if(points == 150)
+			{
+				MyKillCount.Show("RUN, FOREST, RUN!", "150 KILLS");
+				SoundsController.Instance.PlayAnnouncement(13);
+			}
+			else if(points == 175)
+			{
+				MyKillCount.Show("PODLIKE!", "175 KILLS");
+				SoundsController.Instance.PlayAnnouncement(14);
+			}
+			else if(points == 200)
+			{
+				MyKillCount.Show("WE'VE RUN OUT OF PUNS!", "200 KILLS");
+				SoundsController.Instance.PlayAnnouncement(15);
+			}
+			else if(points == 250)
 			{
 				MyKillCount.Show("PAPER INDUSTRY!", "150 KILLS");
 				SoundsController.Instance.PlayAnnouncement(16);
 			}
-			else if(points == 200)
+			else if(points == 300)
 			{
 				MyKillCount.Show("OZON HOLE!", "200 KILLS");
 				SoundsController.Instance.PlayAnnouncement(17);
@@ -203,10 +206,24 @@ public class GameController : MonoBehaviour
 			}
 		}
 	}
+	
+	public void Tutorial()
+	{
+		StartGame();
+		tutorialObject.SetActive(true);
+		Time.timeScale = 0f;
+	}
 
+	public void CloseTutorial()
+	{
+		Time.timeScale = 1f;
+		tutorialObject.SetActive(false);
+	}
 
 	public void StartGame()
 	{
+		Time.timeScale = 1f;
+
 		foreach(var tree in SpawnedTrees)
 		{
 			if(tree != null )
@@ -237,6 +254,8 @@ public class GameController : MonoBehaviour
 
 		MainCharacter = GetComponentInChildren<ControllableCharacter>();
 		PlayableArea = GetComponentInChildren<BG>().GetComponent<Collider2D>();
+
+		SelfieIconBlink.StopBlink();
 
 		Points = 0;
 		PointsLabel.text = Points.ToString();

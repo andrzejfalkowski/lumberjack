@@ -103,7 +103,7 @@ public class NewBomb : MonoBehaviour
 			bool blocked = false;
 			foreach(var tree in GameController.Instance.SpawnedTrees)
 			{
-				if(tree != null && tree.GetComponent<Collider2D>().OverlapPoint(this.transform.position))
+				if(tree != null && tree.MyDamageCollider.OverlapPoint(this.transform.position))
 				{
 					blocked = true;
 					break;
