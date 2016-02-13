@@ -5,7 +5,7 @@ public class CameraFitter : MonoBehaviour
 {
 
 	// Use this for initialization
-	void Start () 
+	void Update () 
 	{
 		GetComponent<Camera>().orthographicSize = 17.8f * Screen.height / Screen.width * 0.5f;
 	}
