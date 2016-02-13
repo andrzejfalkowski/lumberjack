@@ -256,7 +256,14 @@ public class ControllableCharacter : MonoBehaviour
 		trees.AddRange(CollidingTrees);
 		foreach(var tree in trees)
 		{
-			tree.DecreaseHP();
+			if(ImmortalityTimer > 0f)
+			{
+				tree.DecreaseHP(10);
+			}
+			else
+			{
+				tree.DecreaseHP();
+			}
 		}
 		List<Bomb> seeds = new List<Bomb>();
 		seeds.AddRange(CollidingSeeds);

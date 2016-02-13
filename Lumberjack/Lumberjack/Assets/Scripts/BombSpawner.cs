@@ -26,6 +26,7 @@ public class BombSpawner : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		cooldown = MinCooldownStart;
 		minCooldown = MinCooldownStart;
 		maxCooldown = MaxCooldownStart;
 		diffTimer = DifficultyTimer;

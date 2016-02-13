@@ -31,6 +31,7 @@ public class NewBomb : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		MovementSpeed = Mathf.Min(MovementSpeed + ((float)GameController.Instance.Points / 15f), 24f);
 		startDistance = (this.transform.position - Destination).magnitude;
 		//shadowGraphic = this.GetComponent<SpriteRenderer>();
 

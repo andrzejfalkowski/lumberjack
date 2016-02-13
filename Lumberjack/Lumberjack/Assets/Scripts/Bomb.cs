@@ -23,6 +23,7 @@ public class Bomb : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		MovementSpeed = Mathf.Min(MovementSpeed + ((float)GameController.Instance.Points / 15f), 12f);
 		startDistance = (this.transform.localPosition - Destination).magnitude;
 		shadowGraphic = this.GetComponent<SpriteRenderer>();
 	}

@@ -28,9 +28,9 @@ public class EnemyTree : MonoBehaviour
 		MyAnimation.PlayIdleAnimation();
 	}
 
-	public void DecreaseHP()
+	public void DecreaseHP(int amount = 1)
 	{
-		HP--;
+		HP -= amount;
 
 		GameObject spawnedObject = Instantiate<GameObject>(DamagePrefab);
 		ControllableCharacter character = GameController.Instance.MainCharacter;

@@ -197,7 +197,7 @@ public class GameController : MonoBehaviour
 		}
 		SelfieBar.fillAmount = SelfieMeter/100f;
 
-		if( SelfieMeter >= 100f)
+		if( SelfieMeter >= 100f && CurrentGamePhase == EGamePhase.InProgress)
 		{
 			if(RPM)
 			{
@@ -206,7 +206,17 @@ public class GameController : MonoBehaviour
 			}
 		}
 	}
-	
+
+
+	public void TrySelfie()
+	{
+		if( SelfieMeter >= 100f && CurrentGamePhase == EGamePhase.InProgress)
+		{
+				MainCharacter.TakeSelfie();
+				SelfieMeter = 0f;
+		}
+	}
+
 	public void Tutorial()
 	{
 		StartGame();
