@@ -70,6 +70,7 @@ public class GameController : MonoBehaviour
 			{
 				MyKillCount.Show("FIRST SAP!", "1 KILL");
 				SoundsController.Instance.PlayAnnouncement(0);
+				AchievementController.Instance.UnlockAchievement(EAchiementType.NoQuestionsAxed);
 			}
 			else if(points == 5)
 			{
@@ -125,6 +126,7 @@ public class GameController : MonoBehaviour
 			{
 				MyKillCount.Show("LEAF NO TREE ALIVE!", "100 KILLS");
 				SoundsController.Instance.PlayAnnouncement(11);
+				AchievementController.Instance.UnlockAchievement(EAchiementType.ThisGameIsGrowing);
 			}
 			else if(points == 125)
 			{
@@ -145,6 +147,7 @@ public class GameController : MonoBehaviour
 			{
 				MyKillCount.Show("WE'VE RUN OUT OF PUNS!", "200 KILLS");
 				SoundsController.Instance.PlayAnnouncement(15);
+				AchievementController.Instance.UnlockAchievement(EAchiementType.NoMorePunder);
 			}
 			else if(points == 250)
 			{
@@ -160,6 +163,11 @@ public class GameController : MonoBehaviour
 			{
 				MyKillCount.Show("GLOBAL WARMING!", "500 KILLS");
 				SoundsController.Instance.PlayAnnouncement(18);
+				AchievementController.Instance.UnlockAchievement(EAchiementType.AllIGot);
+			}
+			else if(points == 1000)
+			{
+				AchievementController.Instance.UnlockAchievement(EAchiementType.Tunguska);
 			}
 		}
 	}

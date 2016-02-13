@@ -51,12 +51,25 @@ public class ControllableCharacter : MonoBehaviour
 
 	public float ImmortalityTimer = 0f;
 
+	bool selfie1 = false;
+	bool selfie2 = false;
+	bool selfie3 = false;
+	int killedInRage = 0;
+	int bombedInRage = 0;
+
 	// Use this for initialization
 	void Start () 
 	{
 		ImmortalityTimer = 0f;
 		GameController.Instance.HealthBar.fillAmount = HP/MAX_HP;
 		myAnimation = GetComponent<Animator>();
+
+		selfie1 = false;
+		selfie2 = false;
+		selfie3 = false;
+
+		killedInRage = 0;
+		bombedInRage = 0;
 	}
 
 	void Update()
@@ -254,17 +267,27 @@ public class ControllableCharacter : MonoBehaviour
 		PlayIdleAnimation();
 		List<EnemyTree> trees = new List<EnemyTree>();
 		trees.AddRange(CollidingTrees);
+		int killed = 0;
 		foreach(var tree in trees)
 		{
 			if(ImmortalityTimer > 0f)
 			{
 				tree.DecreaseHP(10);
+				killedInRage++;
+				killed++;
+				if(killedInRage == 5)
+					AchievementController.Instance.UnlockAchievement(EAchiementType.CuttingEdge);
 			}
 			else
 			{
+				if(tree.HP <= 1)
+					killed++;
+
 				tree.DecreaseHP();
 			}
 		}
+		if(killed >= 3)
+			AchievementController.Instance.UnlockAchievement(EAchiementType.OneTwoTree);
 		List<Bomb> seeds = new List<Bomb>();
 		seeds.AddRange(CollidingSeeds);
 		foreach(var seed in seeds)
@@ -276,7 +299,12 @@ public class ControllableCharacter : MonoBehaviour
 	public void DecreaseHP(float damage = 1f)
 	{
 		if(ImmortalityTimer > 0f)
+		{
+			bombedInRage++;
+			if(bombedInRage >= 3)
+				AchievementController.Instance.UnlockAchievement(EAchiementType.Photobomb);
 			return;
+		}
 
 		SoundsController.Instance.PlayScreamSound();
 
@@ -306,14 +334,32 @@ public class ControllableCharacter : MonoBehaviour
 	public void TakeSelfie()
 	{
 		ImmortalityTimer = 6f;
+		killedInRage = 0;
+		bombedInRage = 0;
+
+		if(CurrentState == ECharacterState.Dying)
+			AchievementController.Instance.UnlockAchievement(EAchiementType.LumberSlumber);
 		CurrentState = ECharacterState.TakingSelfie;
 		int random = Random.Range (0, 9);
 		if(random< 3)
+		{
 			myAnimation.Play("selfie_1");
+			selfie1 = true;
+		}
 		else if(random < 6)
+		{
 			myAnimation.Play("selfie_2");
+			selfie2 = true;
+		}
 		else
+		{
 			myAnimation.Play("selfie_3");
+			selfie3 = true;
+		}
+		if(selfie1 && selfie2 && selfie3)
+		{
+			AchievementController.Instance.UnlockAchievement(EAchiementType.LumberFab);
+		}
 	}
 	
 	public void SelfieDone()
